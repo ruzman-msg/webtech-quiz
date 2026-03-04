@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Technologies Community - Quiz</title>
+    
+    <script>
+        // ============================================
+        // QUIZ-FRAGEN - HIER BEARBEITEN!
+        // ============================================
+        const QUIZ_DATA = [
+            {
+                question: `Bist du dir sicher?`,
+                options: [`Ja`, `Nein`],
+                correctAnswer: 0
+            },
+            {
+                question: `[HTML] Wenn ich den value von <input type="number"> in z.B. TypeScript abfrage, erhalte ich den Typ ...`,
+                options: [`string`, `number`, `keines der genannten Optionen`],
+                correctAnswer: 0,
+                explanation: `Der numerische Wert kann mit valueAsNumber abgefragt werden.`,
+                link: `https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/number`
+            }
+        ];
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #a01441;
+            --primary-hover: #6d0e2e;
+            --success-color: #51d669;
+            --error-color: #f52561;
+            --bg-color: #f8f8f8;
+            --card-bg: #ffffff;
+            --text-primary: #131313;
+            --text-secondary: #575757;
+            --border-color: #dedede;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(50deg, #a01441 0%, #6d0e2e 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        .quiz-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            max-width: 900px;
+            width: 100%;
+            height: calc(100vh - 3rem);
+            max-height: 950px;
+            padding: 2rem;
+            animation: slideIn 0.4s ease-out;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quiz-header {
+            text-align: center;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .quiz-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-progress {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .question-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 1.5rem 0;
+            min-height: 0;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+
+        .option {
+            background: var(--bg-color);
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .option.selected {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .option.correct {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+            animation: pulse 0.5s ease;
+        }
+
+        .option.incorrect {
+            background: var(--error-color);
+            color: white;
+            border-color: var(--error-color);
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .feedback-container {
+            background: var(--bg-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.2rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+            display: none;
+            flex-shrink: 0;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .feedback-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: var(--primary-color);
+        }
+
+        .feedback-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+            margin-bottom: 0.4rem;
+        }
+
+        .feedback-link {
+            display: inline-block;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 0.4rem;
+            font-size: 1rem;
+        }
+
+        .feedback-link:hover {
+            text-decoration: underline;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            padding-top: 1rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            min-width: 130px;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .quiz-container {
+                padding: 1.5rem;
+                height: calc(100vh - 2rem);
+            }
+
+            .quiz-title {
+                font-size: 1.6rem;
+            }
+
+            .question-text {
+                font-size: 1.3rem;
+            }
+
+            .option {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .quiz-title {
+                font-size: 1.6rem;
+            }
+
+            .question-text {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+
+            .option {
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+
+            .quiz-header {
+                padding-bottom: 0.8rem;
+            }
+
+            .question-container {
+                padding: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1 class="quiz-title">Web Technologies Community</h1>
+            <div class="quiz-progress" id="progress">Frage 1 von 10</div>
+        </div>
+
+        <div class="question-container">
+            <h2 class="question-text" id="question">Frage wird geladen...</h2>
+            
+            <div class="options-container" id="options">
+                <!-- Options werden dynamisch eingefügt -->
+            </div>
+
+            <div class="feedback-container" id="feedback">
+                <div class="feedback-title">✓ Korrekte Antwort</div>
+                <div class="feedback-text" id="feedbackText"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-secondary" id="prevBtn" onclick="quiz.previousQuestion()">
+                ← Zurück
+            </button>
+            <button class="btn btn-primary" id="checkBtn" onclick="quiz.checkAnswer()">
+                Antwort prüfen
+            </button>
+            <button class="btn btn-primary" id="nextBtn" onclick="quiz.nextQuestion()" style="display: none;">
+                Weiter →
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // HTML-Escape-Funktion für Sicherheit
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Quiz-Klasse für saubere Code-Organisation
+        class Quiz {
+            constructor(questions) {
+                this.questions = questions;
+                this.currentQuestionIndex = 0;
+                this.selectedAnswer = null;
+                this.hasCheckedAnswer = false;
+                this.init();
+            }
+
+            init() {
+                this.renderQuestion();
+                this.updateProgress();
+                this.updateNavigationButtons();
+            }
+
+            renderQuestion() {
+                const question = this.questions[this.currentQuestionIndex];
+                
+                // Frage-Text aktualisieren
+                document.getElementById('question').textContent = question.question;
+                
+                // Optionen rendern
+                const optionsContainer = document.getElementById('options');
+                optionsContainer.innerHTML = '';
+                
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.onclick = () => this.selectAnswer(index);
+                    optionsContainer.appendChild(optionElement);
+                });
+
+                // Reset state
+                this.selectedAnswer = null;
+                this.hasCheckedAnswer = false;
+                this.hideFeedback();
+                this.updateNavigationButtons();
+            }
+
+            selectAnswer(index) {
+                if (this.hasCheckedAnswer) return;
+
+                this.selectedAnswer = index;
+                
+                // Visuelle Auswahl updaten
+                const options = document.querySelectorAll('.option');
+                options.forEach((opt, i) => {
+                    opt.classList.toggle('selected', i === index);
+                });
+
+                this.updateNavigationButtons();
+            }
+
+            checkAnswer() {
+                if (this.selectedAnswer === null || this.hasCheckedAnswer) return;
+
+                this.hasCheckedAnswer = true;
+                const question = this.questions[this.currentQuestionIndex];
+                const options = document.querySelectorAll('.option');
+                
+                // Korrekte Antwort markieren
+                options[question.correctAnswer].classList.add('correct');
+                
+                // Falsche Antwort markieren
+                if (this.selectedAnswer !== question.correctAnswer) {
+                    options[this.selectedAnswer].classList.add('incorrect');
+                }
+
+                // Alle Optionen disablen
+                options.forEach(opt => {
+                    opt.classList.add('disabled');
+                });
+
+                // Feedback anzeigen
+                this.showFeedback(question);
+                this.updateNavigationButtons();
+            }
+
+            showFeedback(question) {
+                const feedbackContainer = document.getElementById('feedback');
+                const feedbackText = document.getElementById('feedbackText');
+                
+                let feedbackHTML = '';
+                
+                if (question.explanation) {
+                    feedbackHTML += `<p>${escapeHtml(question.explanation)}</p>`;
+                }
+                
+                if (question.link) {
+                    feedbackHTML += `<a href="${escapeHtml(question.link)}" target="_blank" class="feedback-link">→ Mehr erfahren</a>`;
+                }
+                
+                feedbackText.innerHTML = feedbackHTML;
+                feedbackContainer.classList.add('show');
+            }
+
+            hideFeedback() {
+                document.getElementById('feedback').classList.remove('show');
+            }
+
+            nextQuestion() {
+                if (this.currentQuestionIndex < this.questions.length - 1) {
+                    this.currentQuestionIndex++;
+                    this.renderQuestion();
+                    this.updateProgress();
+                }
+            }
+
+            previousQuestion() {
+                if (this.currentQuestionIndex > 0) {
+                    this.currentQuestionIndex--;
+                    this.renderQuestion();
+                    this.updateProgress();
+                }
+            }
+
+            updateProgress() {
+                const progressText = `Frage ${this.currentQuestionIndex + 1} von ${this.questions.length}`;
+                document.getElementById('progress').textContent = progressText;
+            }
+
+            updateNavigationButtons() {
+                const prevBtn = document.getElementById('prevBtn');
+                const checkBtn = document.getElementById('checkBtn');
+                const nextBtn = document.getElementById('nextBtn');
+
+                // Zurück-Button
+                prevBtn.disabled = this.currentQuestionIndex === 0;
+
+                // Check-Button / Next-Button Toggle
+                if (this.hasCheckedAnswer) {
+                    checkBtn.style.display = 'none';
+                    nextBtn.style.display = 'block';
+                    nextBtn.disabled = this.currentQuestionIndex === this.questions.length - 1;
+                } else {
+                    checkBtn.style.display = 'block';
+                    nextBtn.style.display = 'none';
+                    checkBtn.disabled = this.selectedAnswer === null;
+                }
+            }
+        }
+
+        // Quiz initialisieren
+        const quiz = new Quiz(QUIZ_DATA);
+    </script>
+</body>
+</html>
