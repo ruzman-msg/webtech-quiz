@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Technologies Community - Quiz</title>
+    
+    <script>
+        // ============================================
+        // QUIZ-FRAGEN - HIER BEARBEITEN!
+        // ============================================
+        const QUIZ_DATA = [
+            {
+                question: `[HTML] Welches HTML-Element ist die präferierte Wahl, um einen interaktiven Button zu erstellen?`,
+                options: [`<a>`, `<input type="button">`, `<button>`, `<input type="submit">`],
+                correctAnswer: 2,
+                explanation: `While <input> elements of type button are still perfectly valid HTML, the newer <button> element is now the favored way to create buttons.`,
+                link: `https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/button`
+            },
+            {
+                question: "[HTML] Was bewirkt das Attribut 'download' innerhalb eines Anker-Elements (<a>)?",
+                options: ["Gibt dem Browser den Hinweis, die verlinkte Datei herunterzuladen, anstatt sie zu öffnen.", "Gibt dem Browser den Hinweis, den Link zu cachen, um später die nächste Seite schneller zu laden.", "<a> hat kein 'download' Attribut."],
+                correctAnswer: 0,
+                explanation: "How browsers treat downloads varies by browser, user settings, and other factors. The user may be prompted before a download starts, or the file may be saved automatically, or it may open automatically, either in an external application or in the browser itself.",
+                link: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a"
+            },
+            {
+                question: `[HTML] Wenn ich den value von <input type="number"> in z.B. TypeScript abfrage, erhalte ich den Typ ...`,
+                options: [`string`, `number`, `keines der genannten Optionen`],
+                correctAnswer: 0,
+                explanation: `Der numerische Wert kann mit valueAsNumber abgefragt werden.`,
+                link: `https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/number`
+            },
+            {
+                question: "[HTML] Welches HTML-Element eignet sich als generischen Container für Styling-Zwecke?",
+                options: ["<section>", "<container>", "<div>", "<wrapper>"],
+                correctAnswer: 2,
+                explanation: "Das <div>-Element ist ein generischer Container ohne semantische Bedeutung und eignet sich perfekt für Styling-Zwecke."
+            },
+            {
+                question: "[HTML] Welches HTML-Element wird für die erste Überschriftsebene genutzt?",
+                options: ["<heading>", "<header>", "<head>", "<h1>"],
+                correctAnswer: 3,
+                explanation: "Das <h1>-Element definiert die wichtigste Überschrift (Heading Level 1) auf einer Seite."
+            },
+            {
+                question: "[HTML] <b> vs. <strong> und <i> vs. <em> - Welche Aussage ist falsch?",
+                options: [
+                    "Der optische Effekt ist gleich, aber die Semantik unterscheidet sich.",
+                    "Die Betonung bei Screenreadern ist identisch.",
+                    "Der Textstil (kursiv/fett) wird angepasst."
+                ],
+                correctAnswer: 1,
+                explanation: "FALSCH ist: Die Betonung bei Screenreadern ist NICHT identisch. <strong> und <em> haben semantische Bedeutung und werden von Screenreadern betont, während <b> und <i> nur visuell sind."
+            },
+            {
+                question: `[HTML, CSS] Was macht 'position: sticky' CSS setting?`,
+                options: [
+                    `Element does not leave a gap in the page where it would normally have been located.`,
+                    `A sticky element is positioned relative until a certain scroll position is reached`,
+                    `Elements are removed from the normal document flow, and can overlap other elements.`
+                ],
+                correctAnswer: 1,
+                explanation: `An element with position: sticky; toggles between a relative and fixed position, depending on the scroll position.`,
+                link: `https://www.w3schools.com/Css/css_positioning_sticky.asp`
+            },
+            {
+                question: "[CSS] Was ist die Aufgabe der CSS 'line-height'-Property?",
+                options: [
+                    "Die Höhe eines Elements setzen.",
+                    "Das Spacing zwischen Zeilen ändern.",
+                    "Schrift horizontal ausrichten.",
+                    "Keines der genannten Optionen."
+                ],
+                correctAnswer: 1,
+                explanation: "Die line-height-Property definiert den Abstand zwischen Textzeilen (Zeilenhöhe)."
+            },
+            {
+                question: "[CSS] Was ist die Aufgabe der CSS 'text-decoration'-Property?",
+                options: [
+                    "Die Schriftart ändern.",
+                    "Hintergrund für Text zu setzen.",
+                    "Texte z.B. zu unterstreichen.",
+                    "Farbe von Texten anpassen."
+                ],
+                correctAnswer: 2,
+                explanation: "Die text-decoration-Property fügt Dekorationen wie Unterstreichungen, Durchstreichungen oder Überstreichungen zu Text hinzu."
+            },
+            {
+                question: "[CSS] Was ist die Aufgabe der CSS 'overflow-x' und 'overflow-y'-Properties?",
+                options: [
+                    "Ermöglicht das Scrollen, falls der Content zu groß ist.",
+                    "Positionierung von Elementen in Relation des Parents.",
+                    "Ausrichten von Elementen in die Mitte.",
+                    "Keines der genannten Optionen."
+                ],
+                correctAnswer: 0,
+                explanation: "overflow-x und overflow-y steuern, was passiert, wenn Inhalte größer als ihr Container sind - z.B. durch Scrollen, Abschneiden oder Sichtbarmachen."
+            },
+            {
+                question: "[CSS] Wie können wir alle Elemente selektieren?",
+                options: ["::root {}", "* {}", "_ {}", "Keines der genannten Optionen."],
+                correctAnswer: 1,
+                explanation: "Der Universal-Selektor * {} selektiert alle HTML-Elemente auf der Seite."
+            },
+            {
+                question: "[CSS] Welcher der folgenden Werte kann nicht bei der CSS 'display'-Property gesetzt werden?",
+                options: ["inline-block", "inline-float", "inline-flex", "inline-table"],
+                correctAnswer: 1,
+                explanation: "Es gibt keinen 'inline-float' Display-Wert in CSS. Float ist eine separate Property."
+            },
+            {
+                question: "[CSS] Können eigene Schriftarten in CSS auf der Webseite eingebunden werden?",
+                options: [
+                    "Nur in Kombination mit JavaScript.",
+                    "Nur in Kombination mit dem <src> Element.",
+                    "Mit @font-face",
+                    "Keines der genannten Optionen."
+                ],
+                correctAnswer: 2,
+                explanation: "Mit @font-face können eigene Schriftarten in CSS definiert und von Webseiten geladen werden.",
+                link: "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face"
+            },
+            {
+                question: "[CSS] Was ist die Aufgabe der CSS 'display: none'-Property?",
+                options: [
+                    "Es macht ein Element unsichtbar, aber es bleibt im Layout-Flow.",
+                    "Es macht ein Element unsichtbar und entfernt es aus dem Layout-Flow.",
+                    "Es entfernt ein Element komplett aus dem DOM.",
+                    "Es macht nur den Text unsichtbar, aber Rahmen bleiben sichtbar."
+                ],
+                correctAnswer: 1,
+                explanation: "display: none macht ein Element unsichtbar und entfernt es aus dem Layout-Flow. Das Element bleibt aber im DOM vorhanden und nimmt keinen Platz ein."
+            },
+            {
+                question: "[CSS] Was eignet sich besonders gut, um ein 2D-Layout zu erstellen?",
+                options: ["flex", "grid", "table", "inline-block"],
+                correctAnswer: 1,
+                explanation: "CSS Grid eignet sich perfekt für 2D-Layouts mit Zeilen UND Spalten. Flexbox hingegen ist für 1D-Layouts (entweder Zeilen ODER Spalten) optimiert."
+            },
+            {
+                question: "[TypeScript] Wozu ist die 'keyof typeof'-Kombination nützlich?",
+                options: [
+                    "Keys von einem Objekt zu erhalten.",
+                    "Keys von einem Objekttyp zu erhalten.",
+                    "Um Keys in einem Typ zu erstellen.",
+                    "Prüfung auf Existenz von Keys in einem Object."
+                ],
+                correctAnswer: 1,
+                explanation: "keyof typeof extrahiert die Keys aus einem Objekttyp. Beispiel: const obj = { a: 1, b: 2 }; type Keys = keyof typeof obj; // 'a' | 'b'",
+                link: "https://www.typescriptlang.org/docs/handbook/2/keyof-types.html"
+            },
+            {
+                question: `[JavaScript] Was ist ein Unterschied zwischen var, let und const in Javascript?`,
+                options: [
+                    `let hat Block Scoping. var nicht. const erlaubt keine Neuzuweisungen der Variablen.`,
+                    `let ist deprecated. var ist seit ECMA Script 6 der Standard.`,
+                    `const verhindert das Neusetzen sämtlicher Attribute eines Objekts. var erlaubt die neuzuweisung aller Attribute und der Variablen. let erlaubt die Neuzuweisung der Attribute aber nicht der Variablen.`
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: '[JavaScript] Was ist der Unterschied zwischen Array.sort() und Array.toSorted() in JavaScript?',
+                options: [
+                    'Array.toSorted() verändert das originale Array, während Array.sort() ein neues Array zurück gibt.',
+                    'Array.sort() garantiert standardmäßig numerische Sortierung, während Array.toSorted() lexikografisch sortiert.',
+                    'Array.toSorted() ist nur in Node.js verfügbar, nicht in Browsern.',
+                    'Array.sort() verändert das Array direkt, während Array.toSorted() ein neues sortiertes Array zurückgibt, ohne das Original zu verändern.'
+                ],
+                correctAnswer: 3,
+            },
+            {
+                question: `[JavaScript] let a = "hello"; a &&= "world";    --> was ist a?`,
+                options: [`a ist "world"`, `a ist "hello"`],
+                correctAnswer: 0,
+                explanation: `Der logische UND Zuweisungsoperator (&&=) wertet nur den rechten Operanden aus und weist ihn dem linken zu, wenn der linke Operand truthy ist.`,
+                link: `https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Operators/Logical_AND_assignment`
+            },
+            {
+                question: `[JavaScript] let x = 0; x ||= 2;    --> was ist x?`,
+                options: [`x ist 0`, `x ist 2`],
+                correctAnswer: 1,
+                explanation: `Der Logical OR Zuweisungsoperator (||=) wertet nur den rechten Operanden aus und weist ihn dem linken zu, wenn der linke Operand falsy ist. Tatsächlich wird, wenn der linke Operand nicht falsy ist, der rechte überhaupt nicht ausgewertet.`,
+                link: `https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Operators/Logical_OR_assignment`
+            },
+            {
+                question: `[JavaScript] Wir haben const a = { duration: 20, number: null };, was wurde gemacht, dass wir diesen Output bekommen: { duration: 20, speed: 25, number: 10 }?`,
+                options: [
+                    `a.speed ??= 20; a.duration ??= 30;`,
+                    `a.speed ??= 20; a.number ??= 10;`,
+                    `a.speed ??= 25; a.duration ??= 11; a.number ??= 10;`
+                ],
+                correctAnswer: 2,
+                explanation: `Der Nullish-Zuweisungsoperator (??=), auch bekannt als logischer Nullish-Zuweisungsoperator, wertet nur den rechten Operand aus und weist den linken Operand nur dann zu, wenn der linke Operand nullish (null oder undefined) ist.`,
+                link: `https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment`
+            },
+            {
+                question: "[TypeScript] Warum akzeptiert TypeScript eine Instanz der Klasse Katze für eine Funktion, die eigentlich ein Interface Hund erwartet, sofern beide identische Eigenschaften (z.B. name: string) besitzen – während Java dies strikt ablehnen würde?",
+                options: [
+                    "Weil TypeScript automatisch eine Vererbungskette zwischen allen Klassen mit gleichen Feldnamen erstellt.",
+                    "Weil das Schlüsselwort implements in TypeScript optional ist und vom Compiler immer automatisch ergänzt wird.",
+                    "Weil TypeScript zur Laufzeit (Runtime) die Klassennamen ignoriert, um die Performance zu verbessern.",
+                    "Weil TypeScript auf struktureller Typisierung basiert und nur prüft, ob die erforderliche \"Form\" des Objekts vorhanden ist."
+                ],
+                correctAnswer: 3,
+                explanation: "TypeScript verwendet strukturelle Typisierung (\"Duck Typing\"). Es prüft nur, ob ein Objekt die richtige Struktur hat, nicht den Namen des Typs. Java nutzt hingegen nominale Typisierung."
+            },
+            {
+                question: "[TypeScript] Was signalisiert der Typ 'never' in einer Funktion?",
+                options: [
+                    "Dass die Funktion einen leeren String zurückgibt.",
+                    "Dass der Endpunkt der Funktion niemals erreicht wird.",
+                    "Dass die Funktion asynchron ausgeführt wird.",
+                    "Dass der Rückgabetyp jederzeit geändert werden kann."
+                ],
+                correctAnswer: 1,
+                explanation: "Der Typ 'never' signalisiert, dass die Funktion niemals normal zurückkehrt – z.B. weil sie immer einen Error wirft oder eine Endlosschleife hat.",
+                link: "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#the-never-type"
+            },
+            {
+                question: "[TypeScript] Wie kennzeichnet man einen optionalen Parameter in TypeScript?",
+                options: [
+                    "Mit einem Ausrufezeichen (!) vor dem Typ",
+                    "Mit einem Fragezeichen (?) nach dem Namen",
+                    "Durch das Schlüsselwort optional",
+                    "Durch Einklammern des Typs (string)"
+                ],
+                correctAnswer: 1,
+                explanation: "Optionale Parameter werden mit einem Fragezeichen nach dem Namen gekennzeichnet: function greet(name?: string) { ... }"
+            },
+            {
+                question: "[TypeScript] Was bewirkt der Utility-Type NonNullable<T>?",
+                options: [
+                    "Er entfernt null und undefined aus einem gegebenen Typ.",
+                    "Er verhindert, dass eine Variable nach der Initialisierung überschrieben wird.",
+                    "Er wandelt alle optionalen Eigenschaften eines Typs in Pflichtfelder um.",
+                    "Er stellt sicher, dass ein String nicht leer sein darf."
+                ],
+                correctAnswer: 0,
+                explanation: "NonNullable<T> entfernt null und undefined aus einem Union-Typ. Beispiel: NonNullable<string | null | undefined> ergibt string. Für optionale Properties → Pflichtfelder gibt es Required<T>.",
+                link: "https://www.typescriptlang.org/docs/handbook/utility-types.html#nonnullabletype"
+            },
+            {
+                question: "[TypeScript] Was bewirkt der Utility-Type Partial<T>?",
+                options: [
+                    "Er macht alle Eigenschaften eines Typs optional.",
+                    "Er erlaubt nur den Zugriff auf die erste Hälfte eines Typs.",
+                    "Er wandelt alle Eigenschaften in schreibgeschützte Felder um.",
+                    "Er entfernt alle Methoden und behält nur die Datenfelder."
+                ],
+                correctAnswer: 0,
+                explanation: "Partial<T> macht alle Properties eines Typs optional. Beispiel: Partial<{a: string, b: number}> = {a?: string, b?: number}",
+                link: "https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype"
+            },
+            {
+                question: "[TypeScript] Erlaubt TypeScript die Erstellung von Typen mithilfe von Template Literals (z. B. `${Farbe}_${Größe}`)?",
+                options: ["Ja", "Nein"],
+                correctAnswer: 0,
+                explanation: "Ja! TypeScript 4.1+ unterstützt Template Literal Types. Beispiel: type Color = 'red' | 'blue'; type Size = 'small' | 'large'; type ColorSize = `${Color}_${Size}`; // 'red_small' | 'red_large' | 'blue_small' | 'blue_large'",
+                link: "https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html"
+            }
+        ];
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #a01441;
+            --primary-hover: #6d0e2e;
+            --success-color: #51d669;
+            --error-color: #f52561;
+            --bg-color: #f8f8f8;
+            --card-bg: #ffffff;
+            --text-primary: #131313;
+            --text-secondary: #575757;
+            --border-color: #dedede;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(50deg, #a01441 0%, #6d0e2e 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        .quiz-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            max-width: 900px;
+            width: 100%;
+            height: calc(100vh - 3rem);
+            max-height: 950px;
+            padding: 2rem;
+            animation: slideIn 0.4s ease-out;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quiz-header {
+            text-align: center;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .quiz-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-progress {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .question-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 1.5rem 0;
+            min-height: 0;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+
+        .option {
+            background: var(--bg-color);
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .option.selected {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .option.correct {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+            animation: pulse 0.5s ease;
+        }
+
+        .option.incorrect {
+            background: var(--error-color);
+            color: white;
+            border-color: var(--error-color);
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .feedback-container {
+            background: var(--bg-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.2rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+            display: none;
+            flex-shrink: 0;
+        }
+
+        .feedback-container.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .feedback-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: var(--primary-color);
+        }
+
+        .feedback-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+            margin-bottom: 0.4rem;
+        }
+
+        .feedback-link {
+            display: inline-block;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 0.4rem;
+            font-size: 1rem;
+        }
+
+        .feedback-link:hover {
+            text-decoration: underline;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            padding-top: 1rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            min-width: 130px;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .quiz-container {
+                padding: 1.5rem;
+                height: calc(100vh - 2rem);
+            }
+
+            .quiz-title {
+                font-size: 1.6rem;
+            }
+
+            .question-text {
+                font-size: 1.3rem;
+            }
+
+            .option {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .quiz-title {
+                font-size: 1.6rem;
+            }
+
+            .question-text {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+
+            .option {
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+
+            .quiz-header {
+                padding-bottom: 0.8rem;
+            }
+
+            .question-container {
+                padding: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1 class="quiz-title">Web Technologies Community</h1>
+            <div class="quiz-progress" id="progress">Frage 1 von 10</div>
+        </div>
+
+        <div class="question-container">
+            <h2 class="question-text" id="question">Frage wird geladen...</h2>
+            
+            <div class="options-container" id="options">
+                <!-- Options werden dynamisch eingefügt -->
+            </div>
+
+            <div class="feedback-container" id="feedback">
+                <div class="feedback-title">✓ Korrekte Antwort</div>
+                <div class="feedback-text" id="feedbackText"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-secondary" id="prevBtn" onclick="quiz.previousQuestion()">
+                ← Zurück
+            </button>
+            <button class="btn btn-primary" id="checkBtn" onclick="quiz.checkAnswer()">
+                Antwort prüfen
+            </button>
+            <button class="btn btn-primary" id="nextBtn" onclick="quiz.nextQuestion()" style="display: none;">
+                Weiter →
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // HTML-Escape-Funktion für Sicherheit
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Quiz-Klasse für saubere Code-Organisation
+        class Quiz {
+            constructor(questions) {
+                this.questions = questions;
+                this.currentQuestionIndex = 0;
+                this.selectedAnswer = null;
+                this.hasCheckedAnswer = false;
+                this.init();
+            }
+
+            init() {
+                this.renderQuestion();
+                this.updateProgress();
+                this.updateNavigationButtons();
+            }
+
+            renderQuestion() {
+                const question = this.questions[this.currentQuestionIndex];
+                
+                // Frage-Text aktualisieren
+                document.getElementById('question').textContent = question.question;
+                
+                // Optionen rendern
+                const optionsContainer = document.getElementById('options');
+                optionsContainer.innerHTML = '';
+                
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.onclick = () => this.selectAnswer(index);
+                    optionsContainer.appendChild(optionElement);
+                });
+
+                // Reset state
+                this.selectedAnswer = null;
+                this.hasCheckedAnswer = false;
+                this.hideFeedback();
+                this.updateNavigationButtons();
+            }
+
+            selectAnswer(index) {
+                if (this.hasCheckedAnswer) return;
+
+                this.selectedAnswer = index;
+                
+                // Visuelle Auswahl updaten
+                const options = document.querySelectorAll('.option');
+                options.forEach((opt, i) => {
+                    opt.classList.toggle('selected', i === index);
+                });
+
+                this.updateNavigationButtons();
+            }
+
+            checkAnswer() {
+                if (this.selectedAnswer === null || this.hasCheckedAnswer) return;
+
+                this.hasCheckedAnswer = true;
+                const question = this.questions[this.currentQuestionIndex];
+                const options = document.querySelectorAll('.option');
+                
+                // Korrekte Antwort markieren
+                options[question.correctAnswer].classList.add('correct');
+                
+                // Falsche Antwort markieren
+                if (this.selectedAnswer !== question.correctAnswer) {
+                    options[this.selectedAnswer].classList.add('incorrect');
+                }
+
+                // Alle Optionen disablen
+                options.forEach(opt => {
+                    opt.classList.add('disabled');
+                });
+
+                // Feedback anzeigen
+                this.showFeedback(question);
+                this.updateNavigationButtons();
+            }
+
+            showFeedback(question) {
+                const feedbackContainer = document.getElementById('feedback');
+                const feedbackText = document.getElementById('feedbackText');
+                
+                let feedbackHTML = '';
+                
+                if (question.explanation) {
+                    feedbackHTML += `<p>${escapeHtml(question.explanation)}</p>`;
+                }
+                
+                if (question.link) {
+                    feedbackHTML += `<a href="${escapeHtml(question.link)}" target="_blank" class="feedback-link">→ Mehr erfahren</a>`;
+                }
+                
+                feedbackText.innerHTML = feedbackHTML;
+                feedbackContainer.classList.add('show');
+            }
+
+            hideFeedback() {
+                document.getElementById('feedback').classList.remove('show');
+            }
+
+            nextQuestion() {
+                if (this.currentQuestionIndex < this.questions.length - 1) {
+                    this.currentQuestionIndex++;
+                    this.renderQuestion();
+                    this.updateProgress();
+                }
+            }
+
+            previousQuestion() {
+                if (this.currentQuestionIndex > 0) {
+                    this.currentQuestionIndex--;
+                    this.renderQuestion();
+                    this.updateProgress();
+                }
+            }
+
+            updateProgress() {
+                const progressText = `Frage ${this.currentQuestionIndex + 1} von ${this.questions.length}`;
+                document.getElementById('progress').textContent = progressText;
+            }
+
+            updateNavigationButtons() {
+                const prevBtn = document.getElementById('prevBtn');
+                const checkBtn = document.getElementById('checkBtn');
+                const nextBtn = document.getElementById('nextBtn');
+
+                // Zurück-Button
+                prevBtn.disabled = this.currentQuestionIndex === 0;
+
+                // Check-Button / Next-Button Toggle
+                if (this.hasCheckedAnswer) {
+                    checkBtn.style.display = 'none';
+                    nextBtn.style.display = 'block';
+                    nextBtn.disabled = this.currentQuestionIndex === this.questions.length - 1;
+                } else {
+                    checkBtn.style.display = 'block';
+                    nextBtn.style.display = 'none';
+                    checkBtn.disabled = this.selectedAnswer === null;
+                }
+            }
+        }
+
+        // Quiz initialisieren
+        const quiz = new Quiz(QUIZ_DATA);
+    </script>
+</body>
+</html>
